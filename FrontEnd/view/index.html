@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz de Modulación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #osciloscopio {
+            width: 100%;
+            height: 400px;
+            background-color: black;
+        }
+        #osciloscopioDos {
+            width: 100%;
+            height: 400px; /* Igual que #osciloscopio */
+            background-color: black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <div class="header">
+            <h2>Interfaz de Modulación</h2>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="box">
+                    <h5>Señal Portadora</h5>
+                    <label>Voltaje: <span id="voltajePortadoraValue">5V</span></label>
+                    <input type="range" class="form-range" id="voltajePortadora" min="1" max="10" step="0.1" value="5">
+
+                    <label>Frecuencia: <span id="frecuenciaPortadoraValue">1000Hz</span></label>
+                    <input type="range" class="form-range" id="frecuenciaPortadora" min="20" max="20000" step="1"
+                        value="1000">
+
+                    <label>Fase: <span id="fasePortadoraValue">1π</span></label>
+                    <input type="range" class="form-range" id="fasePortadora" min="0" max="6.28" step="0.01"
+                        value="3.14">
+
+                        <button id="toggleButtonPortadora" class="btn btn-primary" onclick="toggleOscilloscopePortadora()">Detener Portadora</button>
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box">
+                    <h5>Gráfica Portadora</h5>
+                    <div id="osciloscopio">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box">
+                    <h5>Tipo de modulación</h5>
+                    <div class="   " style=" height: 150px; background-color: #d1c4e9; border-radius: 8px;">
+                        <br>
+                        <select class=" form-select form-select-sm w-75 ms-3 mt-3 " aria-label="Large select example">
+                            <option selected>Seleccionar</option>
+                            <option value="1">AM</option>
+                            <option value="2">EXPONENCIAL</option>
+                            <option value="3">FM</option>
+                        </select>
+
+                        <button id="EnvioModulacion" class="btn btn-primary" >Generar Gráfica</button>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="box">
+                    <h5>Señal Moduladora</h5>
+                    <label>Voltaje: <span id="voltajeModuladoraValue">5V</span></label>
+                    <input type="range" class="form-range" id="voltajeModuladora" min="1" max="10" step="0.1" value="5">
+
+                    <label>Frecuencia: <span id="frecuenciaModuladoraValue">1000Hz</span></label>
+                    <input type="range" class="form-range" id="frecuenciaModuladora" min="20" max="20000" step="1"
+                        value="1000">
+
+                    <label>Fase: <span id="faseModuladoraValue">1π</span></label>
+                    <input type="range" class="form-range" id="faseModuladora" min="0" max="6.28" step="0.01"
+                        value="3.14">
+
+                        <button id="toggleButtonModuladora" class="btn btn-primary" onclick="toggleOscilloscopeModuladora()">Detener Moduladora</button>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <h5>Gráfica Moduladora</h5>
+                    <div id="osciloscopioDos">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <h5>Señal Modulada</h5>
+                    <div id="scichart-root" style="width: 600px; height: 400px;"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/scichart@3/index.min.js" crossorigin="anonymous"></script>
+        <script src="Script.js"> </script>
+        <script src="ModulacionAmplitud.js"></script>
+</body>
+
+</html>
