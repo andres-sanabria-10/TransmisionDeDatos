@@ -1,0 +1,260 @@
+/* Estilos base */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px 0;
+}
+
+/* Header Styles */
+.header-main {
+  background-color: #1a1a1a;
+  padding: 15px 0;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo-link {
+  text-decoration: none;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.logo-link:hover {
+  color: #2196F3 !important; /* Azul brillante al pasar el mouse */
+}
+
+.main-nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: #ffffff !important;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  background-color: #2196F3; /* Azul brillante al pasar el mouse */
+}
+
+/* Footer Styles */
+.footer-main {
+  background-color: #1a1a1a;
+  padding: 15px 0;
+  border-top: 1px solid #333;
+  margin-top: auto;
+  color: #ffffff !important;
+}
+
+/* Home Page Styles - Fondo oscuro */
+.home-container {
+  padding: 40px 20px;
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.welcome-title {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.welcome-text {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+.option-card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #333;
+  margin-bottom: 20px;
+}
+
+.option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.card-body {
+  padding: 25px;
+}
+
+.card-title {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-text {
+  color: #ffffff;
+  margin-bottom: 25px;
+  min-height: 50px;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #2196F3 !important; /* Azul brillante */
+  border-color: #2196F3 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #1976D2 !important; /* Azul más oscuro al pasar el mouse */
+  border-color: #1976D2 !important;
+}
+
+.btn-secondary {
+  background-color: #455A64 !important; /* Gris azulado */
+  border-color: #455A64 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background-color: #37474F !important;
+  border-color: #37474F !important;
+}
+
+/* Estilos para la página de modulación - Fondo claro */
+.modulacion-container {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+/* Existing styles for modulacion page */
+.box {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  color: #ffffff;
+  border: 1px solid #333;
+}
+
+.header {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #444;
+}
+
+input[type="range"] {
+  margin-bottom: 15px;
+  background-color: #333;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Estilos para hacer que las gráficas sean más anchas */
+.container-fluid {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* Ajustar altura de los paneles de control para alinear con las gráficas */
+.control-panel {
+  height: 100%;
+}
+
+/* Estilos para el select en tema oscuro */
+.form-select {
+  background-color: #333;
+  color: #ffffff;
+  border-color: #444;
+}
+
+.form-select:focus {
+  background-color: #333;
+  color: #ffffff;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+}
+
+/* Estilos para los sliders */
+.form-range::-webkit-slider-thumb {
+  background: #2196F3;
+}
+
+.form-range::-moz-range-thumb {
+  background: #2196F3;
+}
+
+.form-range::-ms-thumb {
+  background: #2196F3;
+}
+
+/* Estilo para el panel de modulación */
+.modulacion-panel {
+  background-color: #252525 !important;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+/* Estilos para los títulos de las secciones */
+h5 {
+  color: #ffffff;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-list {
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .main-nav {
+    justify-content: center;
+  }
+  
+  .option-card {
+    margin-bottom: 20px;
+  }
+}

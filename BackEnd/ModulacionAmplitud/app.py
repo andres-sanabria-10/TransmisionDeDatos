@@ -19,7 +19,7 @@ def modulacion_amplitud():
             return jsonify({"error": "fm debe ser menor que fp"}), 400
 
         # Vector de tiempo (1 segundo, 1000 muestras)
-        t = np.arange(0, 1, 1/2000)
+        t = np.arange(0, 1, 1/5000)
 
         # Señal modulada en amplitud (AM)
         señal_modulada = (Vp * np.sin(2 * np.pi * fp * t) +
