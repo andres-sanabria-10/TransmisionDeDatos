@@ -43,11 +43,11 @@ const HomePage = () => {
             <div className="card-body">
               <h3 className="card-title">Señales Digitales</h3>
               <p className="card-text">
-                Próximamente: Explora modulaciones digitales como ASK, FSK y PSK.
+                Explora modulaciones digitales como ASK, FSK y PSK.
               </p>
-              <button className="btn btn-secondary btn-lg w-100" disabled>
-                Próximamente
-              </button>
+              <Link to="/digitales" className="btn btn-primary btn-lg w-100">
+                Explorar Modulación Digital
+              </Link>
             </div>
           </div>
         </div>

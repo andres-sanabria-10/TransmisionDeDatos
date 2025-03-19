@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-const SignalDisplay = ({ data }) => {
+const SignalDisplay = ({ data, xRange = [0, 0.2], yRange = [-8, 8], id }) => {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const dataSeriesRef = useRef(null);
+  const chartIdRef = useRef(id || `scichart-${Math.random().toString(36).substring(7)}`);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -20,7 +21,7 @@ const SignalDisplay = ({ data }) => {
         } = window.SciChart;
         
         // Inicializar SciChart
-        const { sciChartSurface, wasmContext } = await SciChartSurface.create("scichart-root");
+        const { sciChartSurface, wasmContext } = await SciChartSurface.create(chartIdRef.current);
         
         if (!isComponentMounted) {
           sciChartSurface.delete();
@@ -34,16 +35,17 @@ const SignalDisplay = ({ data }) => {
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
-          tickLabelStyle: { color: "#e0e0e0" }
+          tickLabelStyle: { color: "#e0e0e0" },
+          visibleRange: new NumberRange(xRange[0], xRange[1])
         });
         
         const yAxis = new NumericAxis(wasmContext, { 
           axisTitle: "Amplitud",
-          visibleRange: new NumberRange(-10, 10), // Escala fija
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
-          tickLabelStyle: { color: "#e0e0e0" }
+          tickLabelStyle: { color: "#e0e0e0" },
+          visibleRange: new NumberRange(yRange[0], yRange[1])
         });
         
         sciChartSurface.xAxes.add(xAxis);
@@ -89,15 +91,23 @@ const SignalDisplay = ({ data }) => {
   }, []);
   
   useEffect(() => {
-    // Actualizar datos cuando cambie la señal modulada
+    // Actualizar datos cuando cambie la señal
     if (dataSeriesRef.current && data.t && data.señal && data.t.length > 0) {
       dataSeriesRef.current.clear();
-      dataSeriesRef.current.appendRange(data.t, data.señal);
+      
+      // Encontrar el índice correspondiente al rango X
+      const maxIndex = data.t.findIndex(t => t >= xRange[1]);
+      const endIndex = maxIndex > 0 ? maxIndex : data.t.length;
+      
+      const tSlice = data.t.slice(0, endIndex);
+      const señalSlice = data.señal.slice(0, endIndex);
+      
+      dataSeriesRef.current.appendRange(tSlice, señalSlice);
     }
-  }, [data]);
+  }, [data, xRange]);
   
   return (
-    <div id="scichart-root" ref={containerRef} style={{ width: '100%', height: '350px', backgroundColor: '#121212' }}></div>
+    <div id={chartIdRef.current} ref={containerRef} style={{ width: '100%', height: '250px', backgroundColor: '#121212' }}></div>
   );
 };
 

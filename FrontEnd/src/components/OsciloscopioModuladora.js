@@ -4,19 +4,7 @@ const OsciloscopioModuladora = ({ params }) => {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const dataSeriesRef = useRef(null);
-  const xAxisRef = useRef(null);
-  const tiempoRef = useRef(0);
-  const intervalIdRef = useRef(null);
-  const maxPoints = 600;
   const isInitializedRef = useRef(false);
-  
-  // Referencia a los parámetros actuales para usarlos en el intervalo
-  const paramsRef = useRef(params);
-  
-  // Actualizar la referencia cuando cambien los parámetros
-  useEffect(() => {
-    paramsRef.current = params;
-  }, [params]);
 
   // Efecto para inicializar el gráfico
   useEffect(() => {
@@ -41,18 +29,21 @@ const OsciloscopioModuladora = ({ params }) => {
           return;
         }
         
+        sciChartSurface.background = "#121212"; // Fondo oscuro
+        
         // Configurar ejes
         const xAxis = new NumericAxis(wasmContext, { 
           axisTitle: "Tiempo (s)",
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
-          tickLabelStyle: { color: "#e0e0e0" }
+          tickLabelStyle: { color: "#e0e0e0" },
+          visibleRange: new NumberRange(0, 0.1) // Mostrar 0.1 segundos
         });
         
         const yAxis = new NumericAxis(wasmContext, { 
           axisTitle: "Voltaje (V)", 
-          visibleRange: new NumberRange(-5, 5),
+          visibleRange: new NumberRange(-6, 6), // Ajustado para el rango de voltaje
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
@@ -64,6 +55,7 @@ const OsciloscopioModuladora = ({ params }) => {
         
         // Series de datos
         const signalData = new XyDataSeries(wasmContext);
+        
         const lineSeries = new FastLineRenderableSeries(wasmContext, { 
           stroke: "#2196F3", // Azul para la moduladora
           dataSeries: signalData,
@@ -75,13 +67,12 @@ const OsciloscopioModuladora = ({ params }) => {
         // Guardar referencias
         chartRef.current = sciChartSurface;
         dataSeriesRef.current = signalData;
-        xAxisRef.current = xAxis;
         
         // Marcar como inicializado
         isInitializedRef.current = true;
         
-        // Iniciar actualización automáticamente
-        startUpdating();
+        // Generar datos estáticos
+        generateStaticData();
       } catch (error) {
         console.error("Error inicializando SciChart:", error);
       }
@@ -102,73 +93,40 @@ const OsciloscopioModuladora = ({ params }) => {
     return () => {
       isComponentMounted = false;
       // Limpiar al desmontar
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-      }
       if (chartRef.current) {
         chartRef.current.delete();
       }
     };
   }, []); // Solo se ejecuta una vez al montar
   
-  // Efecto para manejar el estado de ejecución
+  // Efecto para actualizar la gráfica cuando cambien los parámetros
   useEffect(() => {
     if (isInitializedRef.current) {
-      if (params.isRunning) {
-        startUpdating();
-      } else {
-        stopUpdating();
-      }
+      generateStaticData();
     }
-  }, [params.isRunning]);
+  }, [params.voltaje, params.frecuencia, params.fase]);
   
-  const startUpdating = () => {
-    // Evitar múltiples intervalos
-    stopUpdating();
+  const generateStaticData = () => {
+    if (!dataSeriesRef.current) return;
     
-    // Usar una función que siempre acceda a los parámetros actualizados
-    intervalIdRef.current = setInterval(() => {
-      updateOscilloscope();
-    }, 30);
-  };
-  
-  const stopUpdating = () => {
-    if (intervalIdRef.current) {
-      clearInterval(intervalIdRef.current);
-      intervalIdRef.current = null;
-    }
-  };
-  
-  const updateOscilloscope = () => {
-    if (!dataSeriesRef.current || !xAxisRef.current || !window.SciChart) return;
+    dataSeriesRef.current.clear();
     
-    // Usar los parámetros actualizados desde la referencia
-    const currentParams = paramsRef.current;
+    // Generar datos para un ciclo completo
+    const numPoints = 1000;
+    const duration = 0.1; // 0.1 segundos
     
-    if (!currentParams.isRunning) return;
-    
-    const duracion = 2 * Math.PI;
-    const sampleRate = 200;
-    
-    tiempoRef.current += duracion / sampleRate;
-    
-    // Usar los valores actuales de los parámetros
-    const y = currentParams.voltaje * 
-              Math.sin(2 * Math.PI * currentParams.frecuencia * tiempoRef.current / 10000 + currentParams.fase);
-    
-    dataSeriesRef.current.append(tiempoRef.current, y);
-    
-    if (dataSeriesRef.current.count() > maxPoints) {
-      dataSeriesRef.current.removeAt(0);
-    }
-    
-    if (window.SciChart && window.SciChart.NumberRange) {
-      xAxisRef.current.visibleRange = new window.SciChart.NumberRange(tiempoRef.current - 6, tiempoRef.current);
+    for (let i = 0; i < numPoints; i++) {
+      const time = (i / numPoints) * duration;
+      // Convertir frecuencia de Hz a radianes/segundo (2π * f)
+      const angularFreq = 2 * Math.PI * params.frecuencia;
+      const y = params.voltaje * Math.sin(angularFreq * time + params.fase);
+      
+      dataSeriesRef.current.append(time, y);
     }
   };
   
   return (
-    <div id="osciloscopio-moduladora" ref={containerRef} style={{ width: '100%', height: '350px', backgroundColor: 'black' }}></div>
+    <div id="osciloscopio-moduladora" ref={containerRef} style={{ width: '100%', height: '350px', backgroundColor: '#121212' }}></div>
   );
 };
 

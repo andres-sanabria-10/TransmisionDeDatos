@@ -22,13 +22,6 @@ const ControlPanel = ({ title, params, setParams, type }) => {
     });
   };
 
-  const toggleRunning = () => {
-    setParams({
-      ...params,
-      isRunning: !params.isRunning
-    });
-  };
-
   return (
     <div className="box control-panel">
       <h5>{title}</h5>
@@ -64,13 +57,6 @@ const ControlPanel = ({ title, params, setParams, type }) => {
         value={params.fase}
         onChange={handleFaseChange}
       />
-
-      <button 
-        className="btn btn-primary w-100 mt-3" 
-        onClick={toggleRunning}
-      >
-        {params.isRunning ? `Detener ${type === 'portadora' ? 'Portadora' : 'Moduladora'}` : `Reanudar ${type === 'portadora' ? 'Portadora' : 'Moduladora'}`}
-      </button>
     </div>
   );
 };

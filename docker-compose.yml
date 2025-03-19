@@ -8,6 +8,15 @@ services:
     networks:
       - app-network
 
+  modulacion_digital:
+    build:
+      context: ./BackEnd/ModulacionDigital
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+
   frontend:
     build:
       context: ./FrontEnd

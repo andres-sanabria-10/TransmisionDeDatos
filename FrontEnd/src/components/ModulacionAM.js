@@ -20,16 +20,14 @@ const ModulacionAM = () => {
   const [moduladoraParams, setModuladoraParams] = useState({
     voltaje: 3,
     frecuencia: 500,
-    fase: Math.PI,
-    isRunning: true
+    fase: Math.PI
   });
 
   // Estados para señal portadora
   const [portadoraParams, setPortadoraParams] = useState({
     voltaje: 5,
     frecuencia: 2000,
-    fase: Math.PI,
-    isRunning: true
+    fase: Math.PI
   });
 
   // Estado para la señal modulada
@@ -40,6 +38,13 @@ const ModulacionAM = () => {
 
   // Estado para el tipo de modulación
   const [modulationType, setModulationType] = useState('AM');
+  
+  // Títulos según el tipo de modulación
+  const modulationTitles = {
+    'AM': 'Modulación de Amplitud (AM)',
+    'FM': 'Modulación de Frecuencia (FM)',
+    'PM': 'Modulación de Fase (PM)'
+  };
 
   // Función para generar la modulación
   const generateModulation = async () => {
@@ -47,11 +52,13 @@ const ModulacionAM = () => {
       // Calcular índice de modulación
       const m = moduladoraParams.voltaje / portadoraParams.voltaje;
       
-      const response = await axios.post('http://localhost:5000/modulacion_amplitud', {
+      // Usar el nuevo endpoint para todos los tipos
+      const response = await axios.post('http://localhost:5000/modulacion', {
         Vp: portadoraParams.voltaje,
         fp: portadoraParams.frecuencia,
         fm: moduladoraParams.frecuencia,
-        m: m
+        m: m,
+        tipo: modulationType
       });
       
       setModulatedSignal(response.data);
@@ -61,16 +68,25 @@ const ModulacionAM = () => {
     }
   };
 
-  // Generar modulación automáticamente al cargar
+  // Generar modulación automáticamente al cargar o cambiar el tipo
   useEffect(() => {
     generateModulation();
-  }, []);
+  }, [modulationType]);
+
+  // También regenerar cuando cambien los parámetros
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      generateModulation();
+    }, 500); // Pequeño retraso para evitar demasiadas solicitudes
+    
+    return () => clearTimeout(timer);
+  }, [moduladoraParams, portadoraParams]);
 
   return (
     <div className="container-fluid modulacion-container">
       <div className="row mb-4">
         <div className="col-12">
-          <h2 className="text-center">Modulación de Amplitud (AM)</h2>
+          <h2 className="text-center">{modulationTitles[modulationType] || 'Modulación'}</h2>
         </div>
       </div>
       
@@ -132,10 +148,9 @@ const ModulacionAM = () => {
                 value={modulationType}
                 onChange={(e) => setModulationType(e.target.value)}
               >
-                <option value="">Seleccionar</option>
-                <option value="AM">AM</option>
-                <option value="EXPONENCIAL">EXPONENCIAL</option>
-                <option value="FM">FM</option>
+                <option value="AM">Modulación de Amplitud (AM)</option>
+                <option value="FM">Modulación de Frecuencia (FM)</option>
+                <option value="PM">Modulación de Fase (PM)</option>
               </select>
               <button 
                 className="btn btn-primary w-100"

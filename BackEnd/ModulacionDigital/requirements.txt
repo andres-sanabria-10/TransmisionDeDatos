@@ -1,0 +1,5 @@
+Flask==3.0.3
+sympy==1.13.3
+Werkzeug
+Flask-Cors==5.0.0
+numpy

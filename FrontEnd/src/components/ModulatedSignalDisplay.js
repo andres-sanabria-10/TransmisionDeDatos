@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-const OsciloscopioPortadora = ({ params }) => {
+const ModulatedSignalDisplay = ({ data }) => {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const dataSeriesRef = useRef(null);
-  const isInitializedRef = useRef(false);
 
-  // Efecto para inicializar el gráfico
   useEffect(() => {
     let isComponentMounted = true;
     
@@ -22,7 +20,7 @@ const OsciloscopioPortadora = ({ params }) => {
         } = window.SciChart;
         
         // Inicializar SciChart
-        const { sciChartSurface, wasmContext } = await SciChartSurface.create("osciloscopio-portadora");
+        const { sciChartSurface, wasmContext } = await SciChartSurface.create("modulated-signal-chart");
         
         if (!isComponentMounted) {
           sciChartSurface.delete();
@@ -31,34 +29,32 @@ const OsciloscopioPortadora = ({ params }) => {
         
         sciChartSurface.background = "#121212"; // Fondo oscuro
         
-        // Configurar ejes
         const xAxis = new NumericAxis(wasmContext, { 
           axisTitle: "Tiempo (s)",
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
           tickLabelStyle: { color: "#e0e0e0" },
-          visibleRange: new NumberRange(0, 0.1) // Mostrar 0.1 segundos
+          visibleRange: new NumberRange(0, 0.1) // Mostrar solo 0.1 segundos
         });
         
         const yAxis = new NumericAxis(wasmContext, { 
-          axisTitle: "Voltaje (V)", 
-          visibleRange: new NumberRange(-6, 6), // Ajustado para el rango de voltaje
+          axisTitle: "Amplitud",
           labelStyle: { color: "#e0e0e0" },
           titleStyle: { color: "#e0e0e0" },
           majorGridLineStyle: { color: "#333", strokeThickness: 1 },
-          tickLabelStyle: { color: "#e0e0e0" }
+          tickLabelStyle: { color: "#e0e0e0" },
+          visibleRange: new NumberRange(-8, 8) // Rango para señal modulada
         });
         
         sciChartSurface.xAxes.add(xAxis);
         sciChartSurface.yAxes.add(yAxis);
         
-        // Series de datos
-        const signalData = new XyDataSeries(wasmContext);
+        const dataSeries = new XyDataSeries(wasmContext);
         
         const lineSeries = new FastLineRenderableSeries(wasmContext, { 
-          stroke: "#FF5722", // Naranja para la portadora
-          dataSeries: signalData,
+          dataSeries, 
+          stroke: "#4CAF50",  // Verde para la señal modulada
           strokeThickness: 2.5
         });
         
@@ -66,13 +62,7 @@ const OsciloscopioPortadora = ({ params }) => {
         
         // Guardar referencias
         chartRef.current = sciChartSurface;
-        dataSeriesRef.current = signalData;
-        
-        // Marcar como inicializado
-        isInitializedRef.current = true;
-        
-        // Generar datos estáticos
-        generateStaticData();
+        dataSeriesRef.current = dataSeries;
       } catch (error) {
         console.error("Error inicializando SciChart:", error);
       }
@@ -97,37 +87,27 @@ const OsciloscopioPortadora = ({ params }) => {
         chartRef.current.delete();
       }
     };
-  }, []); // Solo se ejecuta una vez al montar
+  }, []);
   
-  // Efecto para actualizar la gráfica cuando cambien los parámetros
   useEffect(() => {
-    if (isInitializedRef.current) {
-      generateStaticData();
-    }
-  }, [params.voltaje, params.frecuencia, params.fase]);
-  
-  const generateStaticData = () => {
-    if (!dataSeriesRef.current) return;
-    
-    dataSeriesRef.current.clear();
-    
-    // Generar datos para un ciclo completo
-    const numPoints = 1000;
-    const duration = 0.1; // 0.1 segundos
-    
-    for (let i = 0; i < numPoints; i++) {
-      const time = (i / numPoints) * duration;
-      // Convertir frecuencia de Hz a radianes/segundo (2π * f)
-      const angularFreq = 2 * Math.PI * params.frecuencia;
-      const y = params.voltaje * Math.sin(angularFreq * time + params.fase);
+    // Actualizar datos cuando cambie la señal modulada
+    if (dataSeriesRef.current && data.t && data.señal && data.t.length > 0) {
+      dataSeriesRef.current.clear();
       
-      dataSeriesRef.current.append(time, y);
+      // Mostrar solo los primeros 0.1 segundos
+      const maxIndex = data.t.findIndex(t => t >= 0.1);
+      const endIndex = maxIndex > 0 ? maxIndex : data.t.length;
+      
+      const tSlice = data.t.slice(0, endIndex);
+      const señalSlice = data.señal.slice(0, endIndex);
+      
+      dataSeriesRef.current.appendRange(tSlice, señalSlice);
     }
-  };
+  }, [data]);
   
   return (
-    <div id="osciloscopio-portadora" ref={containerRef} style={{ width: '100%', height: '350px', backgroundColor: '#121212' }}></div>
+    <div id="modulated-signal-chart" ref={containerRef} style={{ width: '100%', height: '250px', backgroundColor: '#121212' }}></div>
   );
 };
 
-export default OsciloscopioPortadora;
+export default ModulatedSignalDisplay;

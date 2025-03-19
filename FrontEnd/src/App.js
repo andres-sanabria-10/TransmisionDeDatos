@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './components/HomePage';
 import ModulacionAM from './components/ModulacionAM';
+import ModulacionDigital from './components/ModulacionDigital';
 
 function App() {
   return (
@@ -16,12 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/analogicas" element={<ModulacionAM />} />
-            <Route path="/digitales" element={
-              <div className="container mt-5 text-center" style={{ backgroundColor: '#121212', color: '#ffffff' }}>
-                <h2>Modulación Digital</h2>
-                <p>Esta sección estará disponible próximamente.</p>
-              </div>
-            } />
+            <Route path="/digitales" element={<ModulacionDigital />} />
           </Routes>
         </main>
         <Footer />
