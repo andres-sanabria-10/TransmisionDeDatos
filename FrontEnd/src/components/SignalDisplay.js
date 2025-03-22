@@ -4,7 +4,7 @@ const SignalDisplay = ({ data, xRange = [0, 0.2], yRange = [-8, 8], id }) => {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const dataSeriesRef = useRef(null);
-  const chartIdRef = useRef(id || `scichart-${Math.random().toString(36).substring(7)}`);
+  const chartIdRef = useRef(id || `chart-${Math.random().toString(36).substring(7)}`);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -55,8 +55,8 @@ const SignalDisplay = ({ data, xRange = [0, 0.2], yRange = [-8, 8], id }) => {
         
         const lineSeries = new FastLineRenderableSeries(wasmContext, { 
           dataSeries, 
-          stroke: "#4CAF50",  // Verde más vibrante
-          strokeThickness: 2.5 // Aumentar grosor de la línea
+          stroke: "#4CAF50", 
+          strokeThickness: 2
         });
         
         sciChartSurface.renderableSeries.add(lineSeries);
@@ -94,20 +94,12 @@ const SignalDisplay = ({ data, xRange = [0, 0.2], yRange = [-8, 8], id }) => {
     // Actualizar datos cuando cambie la señal
     if (dataSeriesRef.current && data.t && data.señal && data.t.length > 0) {
       dataSeriesRef.current.clear();
-      
-      // Encontrar el índice correspondiente al rango X
-      const maxIndex = data.t.findIndex(t => t >= xRange[1]);
-      const endIndex = maxIndex > 0 ? maxIndex : data.t.length;
-      
-      const tSlice = data.t.slice(0, endIndex);
-      const señalSlice = data.señal.slice(0, endIndex);
-      
-      dataSeriesRef.current.appendRange(tSlice, señalSlice);
+      dataSeriesRef.current.appendRange(data.t, data.señal);
     }
-  }, [data, xRange]);
+  }, [data]);
   
   return (
-    <div id={chartIdRef.current} ref={containerRef} style={{ width: '100%', height: '250px', backgroundColor: '#121212' }}></div>
+    <div id={chartIdRef.current} ref={containerRef} style={{ width: '100%', height: '300px', backgroundColor: '#121212' }}></div>
   );
 };
 

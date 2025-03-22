@@ -139,9 +139,9 @@ const ModulacionDigital = () => {
               <input 
                 type="range" 
                 className="form-range" 
-                min="500" 
-                max="2000" 
-                step="100" 
+                min="300" 
+                max="1000" 
+                step="50" 
                 name="frecuencia"
                 value={portadoraParams.frecuencia}
                 onChange={handlePortadoraChange}
@@ -181,20 +181,6 @@ const ModulacionDigital = () => {
               </>
             )}
             
-            {/* Selector de tipo de modulación */}
-            <div className="mb-3">
-              <label>Tipo de modulación:</label>
-              <select 
-                className="form-select form-select-sm w-100 mt-2"
-                value={modulationType}
-                onChange={(e) => setModulationType(e.target.value)}
-              >
-                <option value="ASK">Modulación ASK</option>
-                <option value="FSK">Modulación FSK</option>
-                <option value="PSK">Modulación PSK</option>
-              </select>
-            </div>
-            
             <button 
               className="btn btn-primary w-100"
               onClick={generateModulation}
@@ -213,7 +199,7 @@ const ModulacionDigital = () => {
                 t: signals.t,
                 señal: signals.portadora
               }}
-              yRange={[-8, 8]}
+              yRange={[-6, 6]}
               xRange={[0, 0.2]}
             />
           </div>
@@ -286,7 +272,20 @@ const ModulacionDigital = () => {
           <div className="box">
             <h5>Información de Modulación</h5>
             <div className="p-3">
-              <p><strong>Tipo:</strong> {modulationType}</p>
+              {/* Selector de tipo de modulación movido aquí */}
+              <div className="mb-3">
+                <label><strong>Tipo de modulación:</strong></label>
+                <select 
+                  className="form-select form-select-sm w-100 mt-2"
+                  value={modulationType}
+                  onChange={(e) => setModulationType(e.target.value)}
+                >
+                  <option value="ASK">Modulación ASK</option>
+                  <option value="FSK">Modulación FSK</option>
+                  <option value="PSK">Modulación PSK</option>
+                </select>
+              </div>
+              
               <p><strong>Bits:</strong> {bitSequence.length}</p>
               <p><strong>Amplitud portadora:</strong> {portadoraParams.voltaje}V</p>
               <p><strong>Frecuencia portadora:</strong> {portadoraParams.frecuencia}Hz</p>
@@ -309,7 +308,7 @@ const ModulacionDigital = () => {
                 t: signals.t,
                 señal: signals.modulada
               }}
-              yRange={[-8, 8]}
+              yRange={[-6, 6]}
               xRange={[0, 0.2]}
             />
           </div>

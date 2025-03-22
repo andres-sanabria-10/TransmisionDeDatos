@@ -128,7 +128,7 @@ const DigitalSignalDisplay = ({ data, xRange = [0, 0.2], yRange = [-0.1, 1.1], i
   }, [data]);
   
   return (
-    <div id={chartIdRef.current} ref={containerRef} style={{ width: '100%', height: '250px', backgroundColor: '#121212' }}></div>
+    <div id={chartIdRef.current} ref={containerRef} style={{ width: '100%', height: '300px', backgroundColor: '#121212' }}></div>
   );
 };
 
