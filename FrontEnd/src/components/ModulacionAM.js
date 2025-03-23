@@ -51,21 +51,22 @@ const ModulacionAM = () => {
 
   const generateModulation = async () => {
     try {
-      // Calcular índice de modulación
-      const m = moduladoraParams.voltaje / portadoraParams.voltaje;
-      setModulationIndex(m); // Actualizar el estado del índice de modulación
-
-
       // Usar el nuevo endpoint para todos los tipos
       const response = await axios.post('http://localhost:5000/modulacion', {
         Vp: portadoraParams.voltaje,
         fp: portadoraParams.frecuencia,
+        Vm: moduladoraParams.voltaje,
         fm: moduladoraParams.frecuencia,
-        m: m,
         tipo: modulationType
       });
-
+  
       setModulatedSignal(response.data);
+      
+      // Actualizar el estado del índice de modulación con el valor recibido del backend
+      if (response.data.indice_modulacion !== undefined) {
+        setModulationIndex(response.data.indice_modulacion);
+      }
+      
       console.log('Modulación generada:', response.data);
     } catch (error) {
       console.error('Error al generar modulación:', error);
@@ -157,16 +158,17 @@ const ModulacionAM = () => {
                 <option value="FM">Modulación de Frecuencia (FM)</option>
                 <option value="PM">Modulación de Fase (PM)</option>
               </select>
-              {modulationType === "AM" && (
-      <div className="box">
-        <h5>Índice de Modulación (m)</h5>
-        <input
-          type="text"
-          className="form-control"
-          value={(modulationIndex * 100).toFixed(2) + "%"}
-          readOnly
-        />
-      </div>)}
+              {modulationType && (
+                <div className="box">
+                  <h5>Índice de Modulación ({modulationType === "AM" ? "m" : modulationType === "FM" ? "β" : "m"})</h5>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={modulationIndex !== null ? modulationIndex.toFixed(2) : "N/A"}
+                    readOnly
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

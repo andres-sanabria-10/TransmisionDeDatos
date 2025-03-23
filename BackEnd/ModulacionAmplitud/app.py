@@ -12,8 +12,9 @@ def modulacion():
         data = request.json
         Vp = float(data.get('Vp', 1))
         fp = float(data.get('fp', 1))
+        Vm = float(data.get('Vm', 1))
         fm = float(data.get('fm', 1))
-        m = float(data.get('m', 1))
+     
         tipo = data.get('tipo', 'AM')  # Tipo de modulación: AM, FM, PM
 
         if fm >= fp:
@@ -21,18 +22,35 @@ def modulacion():
 
         # Vector de tiempo (0.2 segundos, 5000 muestras)
         t = np.arange(0, 0.2, 1/5000)
+        
 
         # Señal modulada según el tipo seleccionado
         if tipo == 'AM':
+            m = Vm / Vp 
             # Modulación de Amplitud (AM)
             señal_modulada = (Vp * np.sin(2 * np.pi * fp * t) +
                              (m * Vp / 2) * np.cos(2 * np.pi * (fp - fm) * t) -
                              (m * Vp / 2) * np.cos(2 * np.pi * (fp + fm) * t))
 
         elif tipo == 'FM':
+            delta_f=fp-fm
+            # Índice de modulación
+            m = delta_f / fm
+            señal_modulada = Vp * np.sin(2 * np.pi * fp * t + m * np.sin(2 * np.pi * fm * t))
+
+
+
+           
             # Modulación de Frecuencia (FM)
-            beta = m * 5  # Índice de modulación para FM
-            señal_modulada = Vp * np.sin(2 * np.pi * fp * t + beta * np.sin(2 * np.pi * fm * t))
+            if m < 1:
+                print("Usando fórmula de banda angosta (NBFM)",m)
+                # Para FM de banda angosta
+            else:
+                print("Usando fórmula de banda ancha (WBFM)",m)
+                # Para FM de banda ancha
+
+
+
 
         elif tipo == 'PM':
             # Modulación de Fase (PM) - Fórmula correcta
@@ -41,7 +59,7 @@ def modulacion():
         else:
             return jsonify({"error": "Tipo de modulación no soportado"}), 400
 
-        return jsonify({"t": t.tolist(), "señal": señal_modulada.tolist()})
+        return jsonify({"t": t.tolist(), "señal": señal_modulada.tolist(),"indice_modulacion": m})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
