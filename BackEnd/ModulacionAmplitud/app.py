@@ -33,9 +33,13 @@ def modulacion():
                              (m * Vp / 2) * np.cos(2 * np.pi * (fp + fm) * t))
 
         elif tipo == 'FM':
-            delta_f=fp-fm
+            # Calcula Δf como un porcentaje de fp
+            k = 100      # Factor de proporción (ajustable)
+            delta_f = k * Vm
+
             # Índice de modulación
             m = delta_f / fm
+            
             señal_modulada = Vp * np.sin(2 * np.pi * fp * t + m * np.sin(2 * np.pi * fm * t))
 
 
