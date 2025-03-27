@@ -24,7 +24,7 @@ const HomePage = () => {
       </div>
       
       <div className="row justify-content-center">
-        <div className="col-md-5">
+        <div className="col-md-4">
           <div className="option-card">
             <div className="card-body">
               <h3 className="card-title">Señales Analógicas</h3>
@@ -38,7 +38,7 @@ const HomePage = () => {
           </div>
         </div>
         
-        <div className="col-md-5">
+        <div className="col-md-4">
           <div className="option-card">
             <div className="card-body">
               <h3 className="card-title">Señales Digitales</h3>
@@ -47,6 +47,20 @@ const HomePage = () => {
               </p>
               <Link to="/digitales" className="btn btn-primary btn-lg w-100">
                 Explorar Modulación Digital
+              </Link>
+            </div>
+          </div>
+        </div>
+        
+        <div className="col-md-4">
+          <div className="option-card">
+            <div className="card-body">
+              <h3 className="card-title">Digitalización (PCM)</h3>
+              <p className="card-text">
+                Explora la conversión analógico-digital mediante PCM y sus variantes.
+              </p>
+              <Link to="/pcm" className="btn btn-primary btn-lg w-100">
+                Explorar PCM
               </Link>
             </div>
           </div>

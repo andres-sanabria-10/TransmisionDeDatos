@@ -258,3 +258,14 @@ h5 {
     margin-bottom: 20px;
   }
 }
+
+/* Estilos para la sección de PCM */
+.binary-code-box {
+  font-family: monospace;
+  min-width: 80px;
+}
+
+.binary-codes-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
