@@ -14,6 +14,9 @@ def modulacion():
         fp = float(data.get('fp', 1))
         Vm = float(data.get('Vm', 1))
         fm = float(data.get('fm', 1))
+        Fasem= float(data.get('Fasem', 0)) # Fase de la moduladora
+        Fasep = float(data.get('Fasep', 0))  # Fase de la portadora
+
      
         tipo = data.get('tipo', 'AM')  # Tipo de modulación: AM, FM, PM
 
@@ -34,31 +37,19 @@ def modulacion():
 
         elif tipo == 'FM':
             # Calcula Δf como un porcentaje de fp
-            k = 100      # Factor de proporción (ajustable)
-            delta_f = k * Vm
-
-            # Índice de modulación
+ 
+            k=2
+            delta_f =k*Vm
             m = delta_f / fm
-            
-            señal_modulada = Vp * np.sin(2 * np.pi * fp * t + m * np.sin(2 * np.pi * fm * t))
-
-
-
-           
-            # Modulación de Frecuencia (FM)
-            if m < 1:
-                print("Usando fórmula de banda angosta (NBFM)",m)
-                # Para FM de banda angosta
-            else:
-                print("Usando fórmula de banda ancha (WBFM)",m)
-                # Para FM de banda ancha
-
-
+            señal_modulada = Vp * np.sin(2 * np.pi * fp * t + delta_f * np.sin(2 * np.pi * fm * t))
 
 
         elif tipo == 'PM':
             # Modulación de Fase (PM) - Fórmula correcta
-            señal_modulada = Vp * np.sin(2 * np.pi * fp * t + m * np.sin(2 * np.pi * fm * t))
+            Kp = 2  # Ejemplo: 1 rad/V
+            m = Kp * Vm
+            señal_modulada = Vp * np.cos(2 * np.pi * fp * t + m * np.sin(2 * np.pi * fm * t))
+
 
         else:
             return jsonify({"error": "Tipo de modulación no soportado"}), 400

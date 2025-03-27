@@ -57,6 +57,8 @@ const ModulacionAM = () => {
         fp: portadoraParams.frecuencia,
         Vm: moduladoraParams.voltaje,
         fm: moduladoraParams.frecuencia,
+        Fasem: moduladoraParams.fase,
+        Fasep: portadoraParams.fase,
         tipo: modulationType
       });
   
