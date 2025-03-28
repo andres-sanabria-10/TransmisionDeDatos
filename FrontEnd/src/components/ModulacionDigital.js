@@ -17,7 +17,8 @@ const ModulacionDigital = () => {
   // Estados para los parámetros de la portadora
   const [portadoraParams, setPortadoraParams] = useState({
     voltaje: 5,
-    frecuencia: 1000
+    frecuencia: 300
+
   });
 
   // Estado para la secuencia de bits (moduladora)

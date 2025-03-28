@@ -41,7 +41,7 @@ const ControlPanel = ({ title, params, setParams, type }) => {
         type="range" 
         className="form-range" 
         min="20" 
-        max="5000" 
+        max="3000" 
         step="1" 
         value={params.frecuencia}
         onChange={handleFrecuenciaChange}
