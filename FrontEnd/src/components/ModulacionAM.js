@@ -173,7 +173,9 @@ const ModulacionAM = () => {
               )}
             </div>
           </div>
-        </div>   {/* Gráfica Señal Modulada */}
+        </div>
+
+        {/* Gráfica Señal Modulada */}
         <div className="col-md-9">
           <div className="box">
             <h5>Señal Modulada</h5>
@@ -184,8 +186,6 @@ const ModulacionAM = () => {
         </div>
       </div>
     </div>
-
-     
   );
 };
 
